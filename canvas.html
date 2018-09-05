@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas progress</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.box{
+			width: 200px;
+			height: 200px;
+			border: 1px solid #e8e8e8;
+			margin: 100px 100px;
+			position: relative;
+		}
+		.img{
+			position: absolute;
+			top: 50px;
+			left: 50px;
+			border-radius: 50%;
+			overflow: hidden;
+			width: 100px;
+			height: 100px;
+			border: 6px solid #e8e8e8;
+		}
+		.img img{
+			width: 100%;
+			height: 100%;
+		}
+		#my_canvas{
+			position: absolute;
+			z-index: 10;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<canvas id="my_canvas" width="200" height="200"></canvas>
+		<div class="img"></div>
+	</div>
+	<script>
+		//原生js的方法
+		// window.onload=function(){
+		// 	console.log('123')
+		// 	var c = document.getElementById('my_canvas');
+		// 	var ctx = c.getContext('2d');
+		// 	var btn = document.getElementById('btn');
+
+		// 	var timer=null,
+		// 		now=0;
+
+		// 	btn.onclick=function(){
+		// 		clearInterval(timer);
+		// 		timer = setInterval(function(){
+		// 			ctx.clearRect(0,0,c.width,c.height);
+		// 			if(now == 360){
+		// 				clearInterval(timer);
+		// 			}else{
+		// 				now++
+		// 			}
+
+		// 			ctx.lineWidth=6;
+		// 			ctx.strokeStyle='#FF9600';
+		// 			ctx.lineCap='round';
+		// 			ctx.moveTo(106,106);
+		// 			ctx.beginPath();
+		// 			ctx.arc(106,106,52,Math.PI * 1.5, Math.PI * 2,false);
+		// 			ctx.stroke();
+		// 		},30)
+		// 	}
+		// }
+
+		
+
+		//面向对象封装的方法
+		function drawImg (options) {
+			this.draw = document.getElementById(options.id);
+			console.log(this.draw)
+			this.ctx = this.draw.getContext('2d');
+			this.now = 0;
+			this.timer = null;
+			this.init();
+		}
+		drawImg.prototype.init=function() {
+			this.timer = setInterval(()=>{
+				this.ctx.clearRect(0,0,this.draw.width,this.draw.height);
+				if(this.now==180){
+					clearInterval(this.timer);
+				}else{
+					this.now++
+				}
+				this.ctx.lineWidth=6;
+				this.ctx.strokeStyle='#FF9600';
+				this.ctx.lineCap='round';
+				this.ctx.moveTo(106,106);
+				this.ctx.beginPath();
+				this.ctx.arc(106,106,52,0, Math.PI * this.now/90,false);
+				this.ctx.stroke();
+			},1)
+		}
+		new drawImg({id:'my_canvas'})
+	</script>
+</body>
+
